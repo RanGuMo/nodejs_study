@@ -16,12 +16,12 @@ const userRouter = require('./src/router/user')
 app.use('/api', userRouter)
 
 // 2.导入并使用用户信息路由模块
-const userinfoRouter = require('./router/userinfo')
+const userinfoRouter = require('./src/router/userinfo')
 // 注意：以 /my 开头的接口，都是有权限的接口，需要进行 Token 身份认证
 app.use('/my', userinfoRouter)
 
 // 3.导入并使用文章分类路由模块
-const artiCleRouter = require('./router/article')
+const artiCleRouter = require('./src/router/article')
 // 为文章分类的路由挂载统一的访问前缀 /my/article
 app.use('/my/article', artiCleRouter)
 
