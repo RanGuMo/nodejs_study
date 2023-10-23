@@ -2,7 +2,7 @@
 const express = require('express')
 // 创建 express 的服务器实例
 const app = express()
-const joi = require('@hapi/joi')
+const joi = require('joi')
 // 导入 cors 中间件
 const cors = require('cors')
 // 将 cors 注册为全局中间件
@@ -69,7 +69,7 @@ app.use(function (err, req, res, next) {
   // if (err.name === 'UnauthorizedError') return res.cc('身份认证失败！')
   if (err.name === 'UnauthorizedError') return res.cc('身份认证失败！', 401)
   // 未知错误
-  // res.cc(err)
+  res.cc(err)
 })
 
 // write your code here...
