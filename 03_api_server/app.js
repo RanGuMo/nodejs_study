@@ -74,6 +74,12 @@ app.use(function (err, req, res, next) {
 
 // write your code here...
 
+
+
+
+// 托管静态资源文件,   使用 express.static() 中间件, uploads 目录中的图片托管为静态资源
+app.use('/uploads', express.static('./src/uploads'))
+
 // 调用 app.listen 方法，指定端口号并启动web服务器
 app.listen(12138, function () {
   console.log('api server running at http://127.0.0.1:12138')
