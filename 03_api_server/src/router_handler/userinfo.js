@@ -71,10 +71,8 @@ exports.updatePassword = (req, res) => {
         })
 
 
-
     })
 
-    res.send('ok')
 }
 
 // 更新用户头像的处理函数
