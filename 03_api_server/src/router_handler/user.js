@@ -35,11 +35,13 @@ exports.regUser = (req, res) => {
     db.query(sql, [userinfo.username], function (err, result) {
         // 执行 SQL 语句失败
         if (err) {
-            return res.send({ status: 1, message: err.message })
+            // return res.send({ status: 1, message: err.message })
+            return res.cc(err)
         }
         // 用户名被占用
         if (result.length > 0) {
-            return res.send({ status: 1, message: '用户名被占用，请更换其他用户名！' })
+            // return res.send({ status: 1, message: '用户名被占用，请更换其他用户名！' })
+            return res.cc('用户名被占用，请更换其他用户名！')
         }
 
         // bcrypt.hashSync(明文密码, 随机盐的长度)
@@ -53,10 +55,12 @@ exports.regUser = (req, res) => {
             if (err) return res.send({ status: 1, message: err.message })
             // SQL 语句执行成功，但影响行数不为 1
             if (results.affectedRows !== 1) {
-                return res.send({ status: 1, message: '注册用户失败，请稍后再试！' })
+                // return res.send({ status: 1, message: '注册用户失败，请稍后再试！' })
+                return res.cc('注册用户失败，请稍后再试！')
             }
             // 注册成功
-            res.send({ status: 0, message: '注册成功！' })
+            // res.send({ status: 0, message: '注册成功！' })
+            res.cc('注册成功！', 0)
         })
 
 
@@ -64,7 +68,7 @@ exports.regUser = (req, res) => {
 
     })
 
- 
+
 
 
 }
