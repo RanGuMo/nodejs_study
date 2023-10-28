@@ -98,6 +98,7 @@ exports.updateCateById = (req, res) => {
 
         // 判断 分类名称 和 分类别名 是否被占用
         if (results.length === 2) return res.cc('分类名称与别名被占用，请更换后重试！')
+        if (results.length === 1 && results[0].name === req.body.name && results[0].alias === req.body.alias) return res.cc('分类名称与别名被占用，请更换后重试！')
         if (results.length === 1 && results[0].name === req.body.name) return res.cc('分类名称被占用，请更换后重试！')
         if (results.length === 1 && results[0].alias === req.body.alias) return res.cc('分类别名被占用，请更换后重试！')
 
