@@ -47,7 +47,7 @@ exports.updateUserinfo = (req, res) => {
 // 重置密码的处理函数
 exports.updatePassword = (req, res) => {
     const sql = `select * from ev_users where id=?`
-    db.query(sql, req.body.id, (err, results) => {
+    db.query(sql, req.user.id, (err, results) => {
         if (err) return res.cc(err)  // 执行 SQL 语句失败
         // 检查指定 id 的用户是否存在
         if (results.length !== 1) return res.cc('用户不存在！')
@@ -60,7 +60,7 @@ exports.updatePassword = (req, res) => {
 
         // 对新密码进行 bcrypt 加密处理
         const newPwd = bcrypt.hashSync(req.body.newPwd, 10)
-        db.query(sql, [newPwd, req.body.id], (err, results) => {
+        db.query(sql, [newPwd, req.user.id], (err, results) => {
             // SQL 语句执行失败
             if (err) return res.cc(err)
             // SQL 语句执行成功，但是影响行数不等于 1
