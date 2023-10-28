@@ -11,7 +11,7 @@ const joi = require('joi')
 
 // 用户名的验证规则
 const username = joi.string().alphanum().min(1).max(10).required()
-// 密码的验证规则
+// 密码的验证规则 不能包含空白字符，并且在6到12位之间
 const password = joi.string().pattern(/^[\S]{6,12}$/).required()
 
 // 注册和登录表单的验证规则对象
