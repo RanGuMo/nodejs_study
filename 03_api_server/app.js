@@ -54,6 +54,11 @@ const artiCleRouter = require('./src/router/article')
 // 为文章分类的路由挂载统一的访问前缀 /my/article
 app.use('/my/article', artiCleRouter)
 
+// 4.导入并使用文章路由模块
+const articlesRouter = require('./src/router/articles')
+// 为文章的路由挂载统一的访问前缀 /my/article
+app.use('/my/article', articlesRouter)
+
 
 
 

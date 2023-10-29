@@ -1,13 +1,8 @@
 // 导入数据库操作模块
 const db = require('../db/index')
 
-// 导入解析 formdata 格式表单数据的包
-const multer = require('multer')
-// 导入处理路径的核心模块
+// 导入处理路径的 path 核心模块
 const path = require('path')
-
-// 创建 multer 的实例对象，通过 dest 属性指定文件的存放路径
-const upload = multer({ dest: path.join(__dirname, '../uploads') })
 
 
 // 新增文章分类的处理函数
@@ -23,13 +18,13 @@ exports.addArticle = (req, res) => {
         // 标题、内容、状态、所属的分类Id
         ...req.body,
         // 文章封面在服务器端的存放路径
-        cover_img: path.join('/uploads', req.file.filename),
+        cover_img: path.join('/uploads', req.file.filename+'.png'),
         // 文章发布时间
         pub_date: new Date(),
         // 文章作者的Id
         author_id: req.user.id,
     }
-
+   
     const sql = `insert into ev_articles set ?`
 
     // 执行 SQL 语句
