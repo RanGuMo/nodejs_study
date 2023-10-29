@@ -84,6 +84,8 @@ app.use(function (err, req, res, next) {
 
 // 托管静态资源文件,   使用 express.static() 中间件, uploads 目录中的图片托管为静态资源
 app.use('/uploads', express.static('./src/uploads'))
+// 前端项目挂载在web目录下
+app.use(express.static('./web'))
 
 // 调用 app.listen 方法，指定端口号并启动web服务器
 app.listen(12138, function () {
