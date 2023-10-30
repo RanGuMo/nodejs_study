@@ -25,9 +25,9 @@ const upload = multer({ dest: path.join(__dirname, '../uploads') })
 router.post('/add', upload.single('cover_img'), expressJoi(add_article_schema), articles_handler.addArticle)
 router.get('/list', articles_handler.getArticleList)
 //根据Id查询文章
-router.get('/:Id',expressJoi(get_articleById_schema),articles_handler.getArticleById)
+router.get('/:id',expressJoi(get_articleById_schema),articles_handler.getArticleById)
 //根据ID删除文章的路由
-router.get('/delete/:Id', expressJoi(delete_schema), articles_handler.deleteById)
+router.get('/delete/:id', expressJoi(delete_schema), articles_handler.deleteById)
 //更新文章的路由
 router.post('/edit',upload.single('cover_img'),expressJoi(update_article_schema),articles_handler.editArticle)
 // 向外共享路由对象

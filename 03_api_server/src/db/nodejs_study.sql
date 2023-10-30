@@ -3,15 +3,15 @@
 
  Source Server         : localhost_3306
  Source Server Type    : MySQL
- Source Server Version : 80018
+ Source Server Version : 50726 (5.7.26)
  Source Host           : localhost:3306
  Source Schema         : nodejs_study
 
  Target Server Type    : MySQL
- Target Server Version : 80018
+ Target Server Version : 50726 (5.7.26)
  File Encoding         : 65001
 
- Date: 29/10/2023 20:15:26
+ Date: 30/10/2023 09:21:38
 */
 
 SET NAMES utf8mb4;
@@ -22,12 +22,12 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `ev_article_cate`;
 CREATE TABLE `ev_article_cate`  (
-  `Id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '分类名称',
   `alias` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '分类别名',
   `is_delete` int(11) NULL DEFAULT 0 COMMENT '是否删除 0:删除，1:未删除',
-  PRIMARY KEY (`Id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ev_article_cate
@@ -43,7 +43,7 @@ INSERT INTO `ev_article_cate` VALUES (5, '文化', 'WenHua', 0);
 -- ----------------------------
 DROP TABLE IF EXISTS `ev_articles`;
 CREATE TABLE `ev_articles`  (
-  `Id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文章标题',
   `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文章内容',
   `cover_img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '封面图片，存放图片路径',
@@ -52,8 +52,8 @@ CREATE TABLE `ev_articles`  (
   `is_delete` tinyint(1) NOT NULL DEFAULT 0 COMMENT 'tinyint 表示布尔类型，0 未删除，1 已删除',
   `cate_id` int(11) NOT NULL COMMENT '分类id',
   `author_id` int(11) NOT NULL COMMENT '作者id',
-  PRIMARY KEY (`Id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ev_articles
@@ -73,7 +73,7 @@ CREATE TABLE `ev_users`  (
   `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `user_pic` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of ev_users

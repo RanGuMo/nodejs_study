@@ -43,7 +43,7 @@ exports.addArticle = (req, res) => {
 
 // 获取文章列表 的处理函数
 exports.getArticleList = (req, res) => {
-    const sql = `select aleft.Id as 'Id',
+    const sql = `select aleft.id as 'Id',
     aleft.title as 'title',
     aleft.content as 'content',
     aleft.pub_date as 'pub_date',
@@ -51,7 +51,7 @@ exports.getArticleList = (req, res) => {
     aleft.is_delete as 'is_delete',
     aright.name as 'cate_name'
     from ev_articles as aleft left join ev_article_cate as aright on aleft.cate_id=aright.id
-    where aleft.is_delete=0 order by aleft.Id asc`
+    where aleft.is_delete=0 order by aleft.id asc`
     db.query(sql, (err, results) => {
         // 执行 SQL 语句失败
         if (err) return res.cc(err)
@@ -68,9 +68,9 @@ exports.getArticleList = (req, res) => {
 
 // 删除文章分类的处理函数
 exports.deleteById = (req, res) => {
-	const sql = `update ev_articles set is_delete=1 where Id=?`
+	const sql = `update ev_articles set is_delete=1 where id=?`
 
-	db.query(sql, req.params.Id, (err, results) => {
+	db.query(sql, req.params.id, (err, results) => {
 		// 执行 SQL 语句失败
 		if (err) return res.cc(err)
 
@@ -84,8 +84,8 @@ exports.deleteById = (req, res) => {
 
 //根据Id查询文章的处理函数
 exports.getArticleById = (req, res) => {
-	const sql = `select * from ev_articles where Id=?`
-	db.query(sql, req.params.Id, (err, results) => {
+	const sql = `select * from ev_articles where id=?`
+	db.query(sql, req.params.id, (err, results) => {
 		// 执行 SQL 语句失败
 		if (err) return res.cc(err)
 		// SQL 语句执行成功，但是没有查询到任何数据
@@ -103,7 +103,7 @@ exports.getArticleById = (req, res) => {
 //更新文章的处理函数
 exports.editArticle = (req, res) => {
 	//先查询有没有这个文章有没有名称撞车
-	const sqlStr = `select * from ev_articles where Id != ? and title = ?`
+	const sqlStr = `select * from ev_articles where id != ? and title = ?`
 	//执行查重操作
 	db.query(sqlStr, [req.body.Id, req.body.title], (err, results) => {
 		if (err) return res.cc(err)
@@ -124,7 +124,7 @@ exports.editArticle = (req, res) => {
 			// 文章作者的Id
 			author_id: req.auth.id,
 		}
-		const sql = `update ev_articles set ? where Id=?`
+		const sql = `update ev_articles set ? where id=?`
 		db.query(sql, [articleInfo, req.body.Id], (err, results) => {
 			if (err) return res.cc(err)
 			if (results.affectedRows !== 1) return res.cc('编辑文章失败！')

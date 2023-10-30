@@ -8,7 +8,7 @@ exports.getArticleCates = (req, res) => {
 
     // 根据分类的状态，获取所有未被删除的分类列表数据
     // is_delete 为 0 表示没有被 标记为删除 的数据
-    const sql = `select * from ev_article_cate where is_delete=0 order by id asc`
+    const sql = `select id as Id,name,alias from ev_article_cate where is_delete=0 order by id asc`
     db.query(sql, (err, results) => {
         if (err) return res.cc(err)  // 1. 执行 SQL 语句失败
         res.send({ // 2. 执行 SQL 语句成功
@@ -70,7 +70,7 @@ exports.deleteCateById = (req, res) => {
 
 // 根据 Id 获取文章分类的处理函数
 exports.getArticleById = (req, res) => {
-    const sql = `select * from ev_article_cate where id=?`
+    const sql = `select id as Id,name,alias from ev_article_cate where id=?`
     db.query(sql, req.params.id, (err, results) => {
         // 执行 SQL 语句失败
         if (err) return res.cc(err)
@@ -90,7 +90,7 @@ exports.getArticleById = (req, res) => {
 // 更新文章分类的处理函数
 exports.updateCateById = (req, res) => {
     // 定义查询 分类名称 与 分类别名 是否被占用的 SQL 语句
-    const sql = `select * from ev_article_cate where Id<>? and (name=? or alias=?)`
+    const sql = `select id as Id,name,alias from ev_article_cate where id<>? and (name=? or alias=?)`
     // 执行查重操作
     db.query(sql, [req.body.Id, req.body.name, req.body.alias], (err, results) => {
         // 执行 SQL 语句失败
@@ -104,10 +104,11 @@ exports.updateCateById = (req, res) => {
 
         // TODO：更新文章分类
         // 定义更新文章分类的 SQL 语句
-        const sql = `update ev_article_cate set ? where Id=?`
+        const sql = `update ev_article_cate set ? where id=?`
         db.query(sql, [req.body, req.body.Id], (err, results) => {
             // 执行 SQL 语句失败
             if (err) return res.cc(err)
+            console.log(results,1111111111111111);
 
             // SQL 语句执行成功，但是影响行数不等于 1
             if (results.affectedRows !== 1) return res.cc('更新文章分类失败！')
