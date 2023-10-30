@@ -108,7 +108,6 @@ exports.updateCateById = (req, res) => {
         db.query(sql, [req.body, req.body.Id], (err, results) => {
             // 执行 SQL 语句失败
             if (err) return res.cc(err)
-            console.log(results,1111111111111111);
 
             // SQL 语句执行成功，但是影响行数不等于 1
             if (results.affectedRows !== 1) return res.cc('更新文章分类失败！')
