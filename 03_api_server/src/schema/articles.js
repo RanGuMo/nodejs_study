@@ -18,25 +18,25 @@ exports.add_article_schema = {
 }
 
 // 定义 文章Id 的校验规则
-const Id = joi.number().integer().min(1).required()
+const id = joi.number().integer().min(1).required()
 // 校验规则对象 - 根据 id 获取文章
 exports.get_articleById_schema = {
 	params: {
-		Id,
+		id,
 	},
 }
 
 // 校验规则对象 - 删除文章
 exports.delete_schema = {
 	params: {
-		Id,
+		id,
 	},
 }
 
 // 校验规则对象 — 更新文章
 exports.update_article_schema = {
 	body: {
-		Id,
+		id,
 		title,
 		cate_id,
 		content,

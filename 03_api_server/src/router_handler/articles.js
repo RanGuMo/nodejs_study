@@ -7,62 +7,105 @@ const path = require('path')
 
 // 新增文章分类的处理函数
 exports.addArticle = (req, res) => {
-    console.log(req.body) // 文本类型的数据
-    console.log('--------分割线----------')
-    console.log(req.file) // 文件类型的数据
+	console.log(req.body) // 文本类型的数据
+	console.log('--------分割线----------')
+	console.log(req.file) // 文件类型的数据
 
-    // 手动判断是否上传了文章封面
-    if (!req.file || req.file.fieldname !== 'cover_img') return res.cc('文章封面是必选参数！')
-    // TODO：表单数据合法，继续后面的处理流程...
-    const articleInfo = {
-        // 标题、内容、状态、所属的分类Id
-        ...req.body,
-        // 文章封面在服务器端的存放路径
-        cover_img: path.join('/uploads', req.file.filename + '.png'),
-        // 文章发布时间
-        pub_date: new Date(),
-        // 文章作者的Id
-        author_id: req.user.id,
-    }
+	// 手动判断是否上传了文章封面
+	if (!req.file || req.file.fieldname !== 'cover_img') return res.cc('文章封面是必选参数！')
+	// TODO：表单数据合法，继续后面的处理流程...
+	const articleInfo = {
+		// 标题、内容、状态、所属的分类Id
+		...req.body,
+		// 文章封面在服务器端的存放路径
+		cover_img: path.join('/uploads', req.file.filename),
+		// 文章发布时间
+		pub_date: new Date(),
+		// 文章作者的Id
+		author_id: req.user.id,
+	}
 
-    const sql = `insert into ev_articles set ?`
+	const sql = `insert into ev_articles set ?`
 
-    // 执行 SQL 语句
-    db.query(sql, articleInfo, (err, results) => {
-        // 执行 SQL 语句失败
-        if (err) return res.cc(err)
+	// 执行 SQL 语句
+	db.query(sql, articleInfo, (err, results) => {
+		// 执行 SQL 语句失败
+		if (err) return res.cc(err)
 
-        // 执行 SQL 语句成功，但是影响行数不等于 1
-        if (results.affectedRows !== 1) return res.cc('发布文章失败！')
+		// 执行 SQL 语句成功，但是影响行数不等于 1
+		if (results.affectedRows !== 1) return res.cc('发布文章失败！')
 
-        // 发布文章成功
-        res.cc('发布文章成功', 0)
-    })
+		// 发布文章成功
+		res.cc('发布文章成功', 0)
+	})
 
 }
 
 // 获取文章列表 的处理函数
 exports.getArticleList = (req, res) => {
-    const sql = `select aleft.id as 'Id',
-    aleft.title as 'title',
-    aleft.content as 'content',
-    aleft.pub_date as 'pub_date',
-    aleft.state as 'state',
-    aleft.is_delete as 'is_delete',
-    aright.name as 'cate_name'
-    from ev_articles as aleft left join ev_article_cate as aright on aleft.cate_id=aright.id
-    where aleft.is_delete=0 order by aleft.id asc`
-    db.query(sql, (err, results) => {
-        // 执行 SQL 语句失败
-        if (err) return res.cc(err)
-        // 获取文章列表成功
-        res.send({
-            status: 0,
-            message: '获取文章列表成功',
-            data: results,
-        })
-    }
-    )
+	// const sql = `select aleft.id as 'Id',
+	// aleft.title as 'title',
+	// aleft.content as 'content',
+	// aleft.pub_date as 'pub_date',
+	// aleft.state as 'state',
+	// aleft.is_delete as 'is_delete',
+	// aright.name as 'cate_name'
+	// from ev_articles as aleft left join ev_article_cate as aright on aleft.cate_id=aright.id
+	// where aleft.is_delete=0 order by aleft.id asc`
+	// db.query(sql, (err, results) => {
+	// 	// 执行 SQL 语句失败
+	// 	if (err) return res.cc(err)
+	// 	// 获取文章列表成功
+	// 	res.send({
+	// 		status: 0,
+	// 		message: '获取文章列表成功',
+	// 		data: results,
+	// 	})
+	// })
+	let pagenum = Number(req.query.pagenum)-1;
+	const pagesize = Number(req.query.pagesize);
+	const cateId = req.query.cate_id ? Number(req.query.cate_id) : null;
+	const state = req.query.state ? req.query.state : null;
+	// 构建 SQL 查询
+	let sql = `
+				SELECT a.*, b.name AS cate_name
+				FROM ev_articles a
+				LEFT JOIN ev_article_cate b ON a.cate_id = b.id
+				WHERE a.is_delete = 0
+			`;
+
+	// 添加 cate_id 条件
+	if (cateId !== null) {
+		sql += ` AND a.cate_id = ${cateId}`;
+	}
+
+	// 添加 state 条件
+	if (state !== null) {
+		sql += ` AND a.state = '${state}'`;
+	}
+
+	// 添加分页条件
+	sql += ` LIMIT ${pagenum}, ${pagesize}`;
+
+	// 执行查询
+	db.query(sql, (err, results) => {
+		if (err) {
+			return res.cc(err);
+		}
+		console.log('SQL 查询语句:', sql); // 在执行后打印 SQL 查询语句
+		// console.log(results);
+
+		res.send({
+			status: 0,
+			message: '获取文章列表成功',
+			data: results,
+		});
+	});
+
+
+
+
+
 }
 
 
@@ -84,7 +127,7 @@ exports.deleteById = (req, res) => {
 
 //根据Id查询文章的处理函数
 exports.getArticleById = (req, res) => {
-	const sql = `select * from ev_articles where id=?`
+	const sql = `select id as Id,title,content,cover_img,pub_date,state,is_delete,cate_id,author_id from ev_articles where id=?`
 	db.query(sql, req.params.id, (err, results) => {
 		// 执行 SQL 语句失败
 		if (err) return res.cc(err)
